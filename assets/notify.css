@@ -1,0 +1,87 @@
+div#notify {
+    font-size: 12px;
+}
+
+ul.notify-container {
+    position: fixed;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul.notify-container.right {right: 20px}
+ul.notify-container.top {top: 20px}
+ul.notify-container.left {left: 20px}
+ul.notify-container.bottom {bottom: 20px}
+
+
+
+ul.notify-container li {
+    width: 260px;
+    margin-bottom: 10px;
+    color: #fff;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 0 12px #999;
+    cursor: pointer;
+    transition: box-shadow 0.5s;
+    padding: 15px 15px 15px 55px;
+    background-repeat: no-repeat;
+    background-position: 3% 50%;
+    position: relative;
+}
+
+ul.notify-container li:hover {
+    box-shadow: none;
+}
+
+ul.notify-container li button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    border: 0;
+    background: 0;
+    font-size: 20px;
+    width: 25px;
+    height: 25px;
+}
+
+ul.notify-container li button:hover {
+    color: #fff;
+}
+
+ul.notify-container li.warn {
+    background-color: #EF8D03;
+    border-color: #AD6604;
+    background-image: url(warn.png);
+}
+
+ul.notify-container li.success {
+    background-color: #4DA54D;
+    border-color: #317F31;
+    background-image: url(success.png);
+}
+
+ul.notify-container li.error {
+    background-color: #DC362D;
+    border-color: #790D07;
+    background-image: url(error.png);
+}
+
+ul.notify-container li.info {
+    background-color: #37A4C3;
+    border-color: #116C86;
+    background-image: url(info.png);
+}
+
+.notify-title {
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.notify-message {}
