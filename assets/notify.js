@@ -84,6 +84,31 @@ var notify = (function(win) {
         return li;
     }
 
+    function animate(options) {
+        var start = Date.now();
+
+        if (!options.timing) {
+            options.timing = function(bounce) {
+                return bounce;
+            }
+        }
+
+        requestAnimationFrame(function animate() {
+            var timeFraction = (Date.now() - start) / options.duration;
+            if (timeFraction > 1) timeFraction = 1;
+
+            // current state of animation
+            var progress = options.timing(timeFraction)
+
+            options.draw(progress);
+
+            if (timeFraction < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                options.done && options.done();
+            }
+        });
+    }
 
     /**
     * @param {String} level of message
@@ -163,10 +188,19 @@ var notify = (function(win) {
         }
     };
 
-
     Notify.prototype.hide = function() {
         try {
-            this.notifyBlock.parentNode.removeChild(this.notifyBlock);
+            var notifyBlock = this.notifyBlock;
+
+            animate({
+                duration: 500,
+                draw: function(percent) {
+                    notifyBlock.style.opacity = 1 - percent;
+                },
+                done: function() {
+                    notifyBlock.parentNode && notifyBlock.parentNode.removeChild(notifyBlock);
+                }
+            });
         } catch(e) {}
     }
 
