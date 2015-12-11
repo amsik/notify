@@ -21,8 +21,6 @@ var notify = (function(win) {
     if ( !(container = document.getElementById('notify')) ) {
         container = document.createElement('div');
         container.id = 'notify';
-
-        document.body.appendChild(container);
     }
 
     var conteinersByPosition = {};
@@ -33,6 +31,10 @@ var notify = (function(win) {
             posBlock.classList,
             [].concat.apply(['notify-container'], opts.position)
         );
+
+        if (!container.parentNode) {
+            document.body.appendChild(container);
+        }
 
         container.appendChild(posBlock);
         conteinersByPosition[opts.positionType] = posBlock;
@@ -75,7 +77,7 @@ var notify = (function(win) {
         content = '<div class="notify-title"></div><div class="notify-message"></div>';
 
         if (opts.closeButton) {
-            content = '<button type="button" name="button">×</button>' + content;
+            content = '<button type="button" class="notify-close">&#10006;</button>' + content;
         }
 
         li.innerHTML = content;
@@ -179,15 +181,6 @@ var notify = (function(win) {
         }
     };
 
-    Notify.prototype.title = function(title) {
-        if (title) {
-            this.title = title;
-            this._update();
-        } else {
-            return this.title;
-        }
-    };
-
     Notify.prototype.hide = function() {
         try {
             var notifyBlock = this.notifyBlock;
@@ -219,6 +212,9 @@ var notify = (function(win) {
 
         info: function() {
             return new Notify('info', arguments);
-        }
+        },
+
+        /* this level by defailt */
+        /* alert: function() {} */
     }
 })(window);
