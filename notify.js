@@ -126,17 +126,20 @@ var notify = (function(win) {
         this.text = options[0];
         this.options = Object.create(_options);
         this.options.level = level;
+        this.title = '';
 
-        // second args can be options (without descr)
-        if (options.length >= 2) {
+        var opts = options[2];
+
+        if ('string' == typeof options[1]) {
             this.title = options[1];
+        } else {
+            opts = options[1];
+        }
 
-            if (options[2] && 'object' == typeof options[2]) {
-                for(var i in options[2]) {
-                    this.options[i] = options[2][i];
-                }
+        if ('object' == typeof opts) {
+            for(var i in opts) {
+                this.options[i] = opts[i];
             }
-
         }
 
         this.options.position = normalizePosition(this.options.position);
@@ -169,7 +172,11 @@ var notify = (function(win) {
         * gm...
         */
         this.notifyBlock.querySelector('.notify-message').innerHTML = this.text;
-        this.notifyBlock.querySelector('.notify-title').innerHTML = this.title || '';
+
+        var nt = this.notifyBlock.querySelector('.notify-title');
+
+        nt.innerHTML = this.title;
+        nt.style.display = 'string' == typeof this.title ? '' : 'none';
     };
 
     Notify.prototype.message = function(message) {
