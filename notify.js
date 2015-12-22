@@ -27,10 +27,7 @@ var notify = (function(win) {
 
     function createPosition(opts) {
         var posBlock = document.createElement('ul');
-        posBlock.classList.add.apply(
-            posBlock.classList,
-            [].concat.apply(['notify-container'], opts.position)
-        );
+        posBlock.className = [].concat.apply(['notify-container'], opts.position).join(' ');
 
         if (!container.parentNode) {
             document.body.appendChild(container);
@@ -72,7 +69,7 @@ var notify = (function(win) {
         /**
         * markup - message doesn't visible yet
         */
-        li.classList.add(opts.level, 'markup');
+        li.className = opts.level + ' markup';
 
         content = '<div class="notify-title"></div><div class="notify-message"></div>';
 
@@ -176,7 +173,7 @@ var notify = (function(win) {
         var nt = this.notifyBlock.querySelector('.notify-title');
 
         nt.innerHTML = this.title;
-        nt.style.display = 'string' == typeof this.title ? '' : 'none';
+        nt.style.display = 'string' == typeof this.title && this.title ? '' : 'none';
     };
 
     Notify.prototype.message = function(message) {
@@ -219,7 +216,7 @@ var notify = (function(win) {
 
         info: function() {
             return new Notify('info', arguments);
-        },
+        }
 
         /* this level by defailt */
         /* alert: function() {} */

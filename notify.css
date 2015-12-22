@@ -28,7 +28,7 @@ ul.notify-container li {
     box-shadow: 0 0 12px #999;
     cursor: pointer;
     transition: box-shadow 0.5s;
-    padding: 20px 15px 20px 55px;
+    padding: 15px 15px 15px 55px;
     background-repeat: no-repeat;
     background-position: 3% 50%;
     position: relative;
@@ -98,21 +98,21 @@ ul.notify-container li.info:before {
     position: absolute;
     top: 0;
     right: 0;
-    color: #000;
+    color: #333;
     text-decoration: none;
     cursor: pointer;
     border: 0;
     background: 0;
-    font-size: 16px;
+    font-size: 14px;
     width: 25px;
     height: 25px;
     outline: none;
 }
 
 .notify-title {
-    font-size: 15px;
+	font-size: 14px;
     font-weight: bold;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .notify-message {}
