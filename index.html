@@ -50,7 +50,14 @@
             function doNotify() {
                 event.preventDefault();
                 notify[f.level.value](f.message.value || 'Notify message', f.title.value || 'Notify title', {
-                    delay: +f.delay.value
+                    delay: +f.delay.value,
+                    closeButton: false,
+                    onClosed: function() {
+                        console.log('closed!');
+                    },
+
+                    onBeforeClose: function() {
+                    }
                 });
             }
 

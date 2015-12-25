@@ -1,17 +1,26 @@
-
-var notify = (function(win) {
+;(function ( root, factory ) {
+    if ( typeof exports === 'object' ) {
+        // CommonJS
+        exports = factory();
+    } else if ( typeof define === 'function' && define.amd ) {
+        // AMD. Register as an anonymous module.
+        define( ['notify'], factory);
+    } else {
+        // Browser globals
+        root.notify = factory();
+    }
+})(this, function() {
 
     var container;
+
     var _options = {
         position: 'right top',
-        overlay: false,
-        resetTimeout: false,
+        resetTimeout: true,
         closeButton: true,
         delay: 3000,
-        onClose: function() {},
-        onClick: function() {},
-        beforeStart: function() {},
-        afterEnd: function() {}
+        onClosed: function() {},
+        onBeforeClose: function() {},
+        onClick: function() {}
     };
 
 
@@ -24,6 +33,14 @@ var notify = (function(win) {
     }
 
     var conteinersByPosition = {};
+
+    function invokeCallback(opts, type, args) {
+        var cb = opts[type];
+
+        if (cb && 'function' == typeof cb) {
+            return cb();
+        }
+    }
 
     function createPosition(opts) {
         var posBlock = document.createElement('ul');
@@ -149,7 +166,8 @@ var notify = (function(win) {
     }
 
     Notify.prototype._initCycle = function() {
-        var closeContainer = this.options.closeButton
+        var opts = this.options;
+        var closeContainer = opts.closeButton
             ? this.notifyBlock.querySelector('button')
             : this.notifyBlock;
         var ctrl = this;
@@ -161,8 +179,23 @@ var notify = (function(win) {
             });
         }
 
-        this.__interval = setTimeout(ctrl.hide.bind(ctrl), this.options.delay);
+        if (opts.resetTimeout) {
+            this.notifyBlock.addEventListener('mouseleave', function() {
+                ctrl.initHideInterval();
+            }, false);
+
+            this.notifyBlock.addEventListener('mouseenter', function() {
+                clearTimeout(ctrl.__interval);
+            }, false);
+        }
+
+        this.initHideInterval();
     };
+
+    Notify.prototype.initHideInterval = function() {
+        clearTimeout(this.__interval);
+        this.__interval = setTimeout(this.hide.bind(this), this.options.delay);
+    }
 
     Notify.prototype._update = function() {
         /**
@@ -188,6 +221,11 @@ var notify = (function(win) {
     Notify.prototype.hide = function() {
         try {
             var notifyBlock = this.notifyBlock;
+            var opts = this.options;
+
+            if (false === invokeCallback(opts, 'onBeforeClose')) {
+                return;
+            }
 
             animate({
                 duration: 500,
@@ -196,6 +234,8 @@ var notify = (function(win) {
                 },
                 done: function() {
                     notifyBlock.parentNode && notifyBlock.parentNode.removeChild(notifyBlock);
+
+                    invokeCallback(opts, 'onClosed');
                 }
             });
         } catch(e) {}
@@ -221,4 +261,5 @@ var notify = (function(win) {
         /* this level by defailt */
         /* alert: function() {} */
     }
-})(window);
+
+});
